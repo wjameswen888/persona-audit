@@ -1,5 +1,7 @@
 # persona-audit
 
+**English** · [中文](README.zh.md) · [日本語](README.ja.md)
+
 **Four fake users read what your tool says to real users — and tell you what makes no sense.**
 
 You're too close to your own product to see where a stranger gets stuck. persona-audit spins up four personas who read *only* your tool's output — never the code, never the docs — and report what they misread, panic at, or can't find. A **consensus matrix** shows what several of them hit independently. That's what you fix first.
@@ -60,7 +62,3 @@ It's a [Claude Code skill](https://docs.claude.com/en/docs/claude-code) — auto
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
----
-
-**中文**：把"机器生成给人看的文字"丢给 4 个不同认知水平的假用户冷读——只看输出、不看代码——几个人撞同一个问题，就是你最该先修的盲区。它诚实：产出是待核实的候选清单，不是测量。
