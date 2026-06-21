@@ -2,13 +2,13 @@
 
 **English** · [中文](README.zh.md) · [日本語](README.ja.md)
 
-**Four fake users read what your tool says to real users — and tell you what makes no sense.**
+**Four fake users read what you're about to publish — and tell you what makes no sense.**
 
-You're too close to your own product to see where a stranger gets stuck. persona-audit spins up four personas who read *only* your tool's output — never the code, never the docs — and report what they misread, panic at, or can't find.
+You're too close to your own words to see where a stranger gets stuck. persona-audit spins up four personas who read *only* the thing you're publishing — a landing page, a post, an email, or your product's output — never the code, never the docs — and report what they misread, panic at, or can't find. **No product required — a single piece of copy counts.**
 
 ## What it catches
 
-Point it at, say, the daily digest your app emails users. Four personas read one real digest *cold* — they see only the output, never your code, so they react like a true first-timer:
+Here's the shape of it. Point it at anything you publish — here, a product's daily digest. Four personas read it *cold* (only the words, never your code), reacting like true first-timers. Three of the four said:
 
 - **Novice:** "It says *This week: 0* — I thought the app was broken."
 - **Veteran:** "*Net change* and *total* are both here and I can't tell which is which."
@@ -22,7 +22,7 @@ It collapses those into a ranked **consensus matrix** — what several personas 
 | "Net change" vs "total" are unlabeled and ambiguous | 2 of 4 | B — clarify |
 | Nothing earns the next open | 2 of 4 | B — add a hook |
 
-Cross-angle agreement is the signal — though the four share one base model, so it's several angles converging, not independent votes. You verify, then fix the top line before it ships.
+Cross-angle agreement is the signal: when several personas land on the same line from different angles, that's where to look first. You verify, then fix the top one before it ships.
 
 ![The kind of consensus matrix persona-audit produces](docs/hero-consensus-matrix.png)
 
@@ -30,22 +30,43 @@ Cross-angle agreement is the signal — though the four share one base model, so
 
 ## Why not just ask Claude to review it?
 
-A plain "review this" prompt tends to follow your wording and tell you what you hoped to hear. persona-audit pins four strangers to fixed identities, lets none of them see your code, and surfaces only what *several of them land on independently* — so it catches the blind spots a single, agreeable pass glides right over.
+A plain "review this" prompt tends to follow your wording and tell you what you hoped to hear. persona-audit pins four strangers to fixed identities, lets none of them see your code, and surfaces only what *several of them flag from different fixed angles* — so it catches the blind spots a single, agreeable pass glides right over.
+
+## A real run (on a landing page)
+
+persona-audit on a draft landing page — condensed from [examples/lite-example.md](examples/lite-example.md), **a real run, not a mock-up**:
+
+- 🔴 **"neuroadaptive session pacing" / "ML engine reads your rhythm"** — all four bounced off it; the novice thought it meant a brain scan, the veteran called it pseudo-science. *Say in plain words what it actually does.*
+- 🔴 **"$9/mo, billed annually ($108)"** — three of four read it as a bait price. *Lead with the number that hits the card.*
+- ⚪ **"Just press start."** — the veteran flagged it as the most credible line on the page. *Keep it.*
+
+It also caught a prompt-injection line hidden in the copy and refused it — treating it as text to audit, never an instruction to follow.
 
 ## When to use
 
-✅ A tool whose engine emits **user-facing text** ships a new version or output — report generators, daily digests, bot push copy, readout tools. *(Yes — a side-project that emails users a daily summary counts.)*
-❌ Code review · pure UI/visual QA · interactive-narrative QA.
+✅ **Anything user-facing you're about to publish** — a landing page, social post, email, app-store blurb, pitch line — *or* a product engine's generated output (report generators, daily digests, bot push copy, readout tools). Paste one piece for an inline read (lite mode), or run it across a generator's many outputs (engine mode).
+❌ Code review · pure UI/visual polish QA · interactive-narrative QA.
 
 ## Quickstart
 
-**Install** — paste these two lines to Claude and let it set up the skill for you:
+**The easy way — no code, no command line.** persona-audit is a *skill*: a saved instruction set your AI assistant follows. Two ways to get there:
+
+- **Have Claude Code?** Install it once (below), then paste what you're publishing and say **"cold-read this from a user's POV."**
+- **No Claude Code?** Open any AI chat (ChatGPT, Claude, etc.), paste in the contents of [SKILL.md](SKILL.md), then your copy, and say the same thing.
+
+Either way you get four personas' plain-language fixes (🔴 fix · 🟡 consider · ⚪ your call · ❓ unsure), inline. *(That's the "real run" above.)*
+
+> 👉 **Just checking your copy? That's the whole thing — you're done.** Everything below is for installing it permanently or wiring it into a product that generates text.
+
+**Install permanently** (repeat use / developers) — it's a standard Agent Skill with no runtime-specific code, so it runs in any skills-compatible runtime (Claude Code, Codex, and others):
 ```bash
 git clone https://github.com/wjameswen888/persona-audit.git
-cp -r persona-audit ~/.claude/skills/
+cp -r persona-audit <your-skills-dir>   # e.g. Claude Code: ~/.claude/skills/
 ```
 
-**Run** — tell Claude **"run a persona audit on \<your tool's output>"**, and point it at where those outputs come from (a demo command, a few pasted samples, or a quick dump script). It gathers 6–8, runs the four personas, and hands back the ranked matrix in a few minutes. No setup needed to start; `LOCAL.md` binds it to your product, but every plug point has a default. It reads output in any language, runs on the Claude Code you already have — no extra subscription, and one run costs about what a single longer conversation does.
+**For a product that generates text (engine mode)** — say **"run a persona audit on \<your tool's output>"** and point it at where the outputs come from (a demo command, a few pasted samples, or a dump script). It gathers 6–8, runs the four personas, and returns the ranked consensus matrix.
+
+**Cost:** a lite run is a handful of short reads; an engine run ≈ one longer chat's usage. Reads output in any language.
 
 ## How it works
 
@@ -57,19 +78,23 @@ cp -r persona-audit ~/.claude/skills/
 
 ## How it differs from "synthetic users"
 
-Those tools simulate users to *do research*, and often dress LLM output up as a measurement. persona-audit does the opposite: it audits the text you **already ship** — a single-person, zero-cost, few-minute blind-spot scan that hands you a **candidate list to verify, not data**. A sharp way to find what to look at next, not a substitute for testing with real users.
+Those tools simulate users to *do research*, and often dress LLM output up as a measurement. persona-audit does the opposite: it audits the text you **already ship** — a single-person, zero-setup, few-minute blind-spot scan that hands you a **candidate list to verify, not data**. A sharp way to find what to look at next, not a substitute for testing with real users.
+
+Honest limit: the four personas share one base model, so a "consensus" is several angles converging, **not independent votes** — treat the counts as a heuristic for *where to look*, not a confidence score.
 
 ## Install details
 
-It's a [Claude Code skill](https://docs.claude.com/en/docs/claude-code) — auto-triggers on the phrases in its description (e.g. *"persona audit"*, *"cold-read audit"*, *"audit the output from a user's POV"*). To bind it to your product, copy `LOCAL.md.example` → `LOCAL.md` (gitignored — your private bindings stay local).
+It's a standard **Agent Skill** — runs in Claude Code, Codex, and other skills-compatible runtimes; auto-triggers on the phrases in its description (e.g. *"persona audit"*, *"cold-read audit"*, *"audit this from a user's POV"*). To bind it to a product (engine mode), copy `LOCAL.md.example` → `LOCAL.md` (gitignored — your private bindings stay local).
 
 ## Files
 
 | File | What |
 |------|------|
-| `SKILL.md` | The method — generic, portable |
-| `templates.md` | 4 persona identity blocks + report skeleton + cross-domain adaptation |
-| `examples/case-study.md` | A real run, start to finish |
+| `SKILL.md` | The method — generic, portable (lite + engine modes) |
+| `templates.md` | Generic persona blocks + report skeletons + safety rules |
+| `examples/lite-example.md` | Lite-mode worked example (paste copy → plain-language read) |
+| `examples/finance-skin.md` | Finance persona skins + cross-domain guide (reference) |
+| `examples/case-study.md` | A real engine-mode run, start to finish |
 | `LOCAL.md.example` | Template for your private product bindings |
 
 ## License
